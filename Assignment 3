@@ -1,0 +1,86 @@
+#include <iostream>
+#include <list>
+using namespace std;
+
+
+template <class T>
+struct QNode
+{
+	T data;
+	QNode* next;
+	QNode(T element)
+	{
+		data = element;
+		next = NULL;
+	}
+};
+
+template <class T>
+class Queue
+{
+private:
+	QNode<T>* first;
+	QNode<T>* last;
+
+public:
+	Queue()		// Default Constructor
+	{
+		first = last = NULL;
+	}
+	void enqueue(T element)		// This function runs in O(1) time 
+	{
+		QNode<T>* temp = new QNode<T>(element);
+		if (last == NULL)			
+		{
+			first = last = temp;		// Adds a value to an empty queue
+			last->next = NULL;		
+			return;
+		}
+
+		last->next = temp;				// Adds a value to the back of a queue
+		last = last->next;
+		last->next = NULL;
+	}
+
+	T dequeue()			// This function runs in O(1) time 
+	{
+		if (first == NULL)
+		{
+			return -1;		// returns -1 in case the queue is empty
+		}
+
+		T val = first->data;
+		
+		QNode<T>* temp = first;
+		first = first->next;	// Points the first element of the queue to it's next
+		delete temp;			// deletes the first element of the queue
+		if (first == NULL)
+			last = NULL;
+
+		return val;			// returns the value of the front element;
+	}
+
+	T peek()			// This function runs in O(1) time 
+	{
+		if (first == NULL)
+		{
+			return -1;			// -1 in case the queue is empty
+		}
+
+		return first->data;		// Returns the value of the first element of the queue
+	}
+};
+
+int main()
+{
+	Queue<int> q;
+	for (int i = 1; i <= 10; i++)
+	{
+		q.enqueue(i);	//adds values 1 to 10 to the queue
+	}
+	cout << q.peek() << endl;	// prints front element of queue
+	q.dequeue();				// removes front element of queue
+	cout << q.peek() << endl;	// prints front element of queue after removal of previous first element
+
+	return 0;
+}
